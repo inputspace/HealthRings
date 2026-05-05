@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import androidx.activity.result.contract.ActivityResultContracts
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     // ✅ Correct API: PermissionController (not HealthConnectClient)
     private val requestPermissions = registerForActivityResult(
     ActivityResultContracts.RequestMultiplePermissions()
-) { results ->
+) { results: Map<String, Boolean> ->
     showLoading()
     loadData()
 }
