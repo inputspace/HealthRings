@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 loadData()
             } else {
                 requestPermissions.launch(
-                    client.permissionController.createRequestPermissionIntent(PERMISSIONS)
+                    client.permissionController.createPermissionRequestIntent(PERMISSIONS)
                 )
             }
         }
