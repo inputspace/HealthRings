@@ -34,16 +34,11 @@ class MainActivity : AppCompatActivity() {
 
     // ✅ Correct API: PermissionController (not HealthConnectClient)
     private val requestPermissions = registerForActivityResult(
-        PermissionController.createRequestPermissionResultContract()
-    ) { granted ->
-        if (granted.containsAll(PERMISSIONS)) {
-            showLoading()
-            loadData()
-        } else {
-            showMessage("Some permissions were denied.\nThe app may show partial data.")
-            loadData()
-        }
-    }
+    ActivityResultContracts.RequestMultiplePermissions()
+) { results ->
+    showLoading()
+    loadData()
+}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
