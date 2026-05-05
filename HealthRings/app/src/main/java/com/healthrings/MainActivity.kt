@@ -33,13 +33,19 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    // ✅ Correct API: PermissionController (not HealthConnectClient)
     private val requestPermissions = registerForActivityResult(
-    ActivityResultContracts.RequestMultiplePermissions()
-) { results: Map<String, Boolean> ->
-    showLoading()
-    loadData()
-}
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        lifecycleScope.launch {
+            val client = HealthConnectClient.getOrCreate(this@MainActivity)
+            val granted = client.permissionController.getGrantedPermissions()
+            if (granted.containsAll(PERMISSIONS)) {
+                loadData()
+            } else {
+                showMessage("Permission denied. Please grant Health Connect permissions.")
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,12 +81,9 @@ class MainActivity : AppCompatActivity() {
             if (granted.containsAll(PERMISSIONS)) {
                 loadData()
             } else {
-                requestPermissions.launch(arrayOf(
-    "android.permission.health.READ_STEPS",
-    "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
-    "android.permission.health.READ_DISTANCE",
-    "android.permission.health.READ_EXERCISE"
-))
+                requestPermissions.launch(
+                    client.permissionController.createRequestPermissionIntent(PERMISSIONS)
+                )
             }
         }
     }
