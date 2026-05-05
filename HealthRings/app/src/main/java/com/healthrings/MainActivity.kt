@@ -74,7 +74,12 @@ class MainActivity : AppCompatActivity() {
             if (granted.containsAll(PERMISSIONS)) {
                 loadData()
             } else {
-                requestPermissions.launch(PERMISSIONS)
+                requestPermissions.launch(arrayOf(
+    "android.permission.health.READ_STEPS",
+    "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
+    "android.permission.health.READ_DISTANCE",
+    "android.permission.health.READ_EXERCISE"
+))
             }
         }
     }
